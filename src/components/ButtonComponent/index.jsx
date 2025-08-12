@@ -1,5 +1,5 @@
-export default function ButtonComponent({ label, type = 'submit', onClick, color = "green" }) {
-    const baseClasses = "transition px-4 py-2 text-white md:text-xl text-sm rounded-md md:w-50 w-35 h-8 md:ml-35 md:h-10 flex items-center justify-center"
+export default function ButtonComponent({ label, type = 'submit', onClick, color = "green", size, text }) {
+    const baseClasses = "transition px-4 py-2 text-white rounded-md md:ml-35 flex items-center justify-center"
 
     const colorClassesMap = {
         green: "bg-[#7EE38E] hover:bg-green-500",
@@ -8,13 +8,15 @@ export default function ButtonComponent({ label, type = 'submit', onClick, color
         gray: "bg-gray-400 hover:bg-gray-600",
     };
 
+    const sizeStyles = size || "md:w-50 w-35 md:h-10 h-8" 
     const colorClasses = colorClassesMap[color] || colorClassesMap.green;
+    const texStyles = text || "md:text-xl text-sm"
     return (
         <>
             <button
                 type={type}
                 onClick={onClick}
-                className={`${colorClasses} ${baseClasses}`}
+                className={`${colorClasses} ${baseClasses} ${sizeStyles} ${texStyles}`}
             >
                 {label}
             </button>
