@@ -68,7 +68,7 @@ export default function Login() {
                                     />
                                 </div>
                                 <div className=' mt-1 ml-2'>
-                                    <a href='' arget="_blank" rel="noopener noreferrer" className='underline text-blue-800 font-normal hover:text-blue-900 text-sm'>Esqueci Minha Senha</a>
+                                    <a href='/forget/password' arget="_blank" rel="noopener noreferrer" className='underline text-blue-800 font-normal hover:text-blue-900 text-sm'>Esqueci Minha Senha</a>
                                 </div>
                                 <div className='mt-4 mb-4'>
                                     <AuthButtonComponent

@@ -17,18 +17,18 @@ export default function MenuUser() {
 
     return (
         <nav className="bg-[#00559C] flex flex-row h-auto w-full px-0 justify-center">
-            <p className="hidden md:block text-4xl md:text-4xl md:p-3 p-1 text-white text-lg font-bold">Católica Eventos</p>
+            <p className="hidden md:block  md:text-4xl md:p-3 p-1 text-white text-lg font-bold">Católica Eventos</p>
             <ul className="justify-center items-center md:flex-row flex flex-row  space-x-3 md:space-x-5 text-white text-xs md:text-xl md:p-5 p-3 md:ml-auto font-bold md:mr-0">
                 <li>
                     <NavLink to="/" className="flex items-center gap-1"
                     ><FaHome className="w-5 h-5" /> Home</NavLink>
                 </li>
                 <li className="hidden md:flex">
-                    <NavLink to="/" className="flex items-center gap-1 whitespace-nowrap"
+                    <NavLink to="/my/events" className="flex items-center gap-1 whitespace-nowrap"
                     ><FaClipboardList className="w-5 h-5 mb-1" /> Meus Eventos</NavLink>
                 </li>
                 <li className="flex md:hidden">
-                    <NavLink to="/" className="flex items-center gap-1"
+                    <NavLink to="/my/events" className="flex items-center gap-1"
                     ><FaClipboardList className="w-5 h-5 mb-1" /> Eventos</NavLink>
                 </li>
                 <li>

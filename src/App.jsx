@@ -9,6 +9,12 @@ import Home from './pages/Home';
 import UpdateProfileUser from './pages/UpdateProfileUser';
 import EventDetail from './pages/EventDetail';
 import ValidateCertificate from './pages/ValidateCertificate';
+import MyEvents from './pages/MyEvents';
+import MyActivities from './pages/MyActivities';
+import MyCertificates from './pages/MyCertificates';
+import ForgetPassword from './pages/ForgetPassword';
+
+
 
 function App() {
   return (
@@ -24,6 +30,10 @@ function App() {
             <Route path='/update/user' element={<PrivateRoute requiredRole="user"><UpdateProfileUser></UpdateProfileUser></PrivateRoute>}></Route>
             <Route path='/event/:id_event' element={<EventDetail></EventDetail>}></Route>
             <Route path='/validate' element={<ValidateCertificate></ValidateCertificate>}></Route>
+            <Route path='/my/events' element={<PrivateRoute requiredRole="user"><MyEvents></MyEvents></PrivateRoute>}></Route>
+            <Route path='/:id_event/my/activities' element={<PrivateRoute requiredRole="user"><MyActivities></MyActivities></PrivateRoute>}></Route>
+            <Route path='/my/certificate' element={<PrivateRoute requiredRole="user"><MyCertificates></MyCertificates></PrivateRoute>}></Route>
+            <Route path='/forget/password' element={<ForgetPassword></ForgetPassword>}></Route>
           </Routes>
         </Router>
       </AuthProvider>

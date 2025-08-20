@@ -18,7 +18,7 @@ export default function RegisterUser() {
                     <h1 className='text-white font-bold text-xl text-center md:text-left md:text-3xl'>BEM VINDO(A) Á CATÓLICA EVENTOS</h1>
                 </div>
 
-                <div className="flex flex-col items-center justify-center flex-grow min-h-screen px-4 md:px-8">
+                <div className="flex flex-col items-center justify-center flex-grow min-h-screen px-4 md:px-8 pt-6 md:pt-2">
                     <img className="w-40 h-auto mb-4 mx-auto " src={logo} alt='Logo Católica'></img>
                     <h1 style={{ color: '#00559C' }} className='font-bold text-3xl md:text-3xl mb-6 text-center'>Cadastre-se na Católica Eventos</h1>
                     <div style={{ boxShadow: "0 6px 7px -3px rgba(0, 0, 0, 0.3)" }} className='border-1 rounded border-gray-200 p-6 w-full md:w-[430px] mx-auto md:h-[385px]' >

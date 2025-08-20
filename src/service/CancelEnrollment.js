@@ -1,13 +1,13 @@
 import Api from "../service/Api.js";
 
-export default async function createEnrollment(id_activity, token) {
+export default async function cancelEnrollment(id_activity, token) {
     try {
-        const response = await Api.post(`/enrollment/${id_activity}`, null, {
+        const response = await Api.delete(`/enrollment/${id_activity}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-        return response.data;       
+        return response.data.cancelEnrollment;       
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.error);

@@ -1,13 +1,13 @@
 import Api from "../service/Api.js";
 
-export default async function createEnrollment(id_activity, token) {
+export default async function myEvents(token) {
     try {
-        const response = await Api.post(`/enrollment/${id_activity}`, null, {
+        const response = await Api.get(`/enrollment/my-events`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-        return response.data;       
+        return response.data.allEventsUser;       
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.error);

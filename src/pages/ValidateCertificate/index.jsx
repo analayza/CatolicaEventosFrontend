@@ -13,14 +13,17 @@ export default function ValidateCertificate() {
     const [message, setMessage] = useState("");
     return (
         <>
-            <div className="flex px-4 md:px-0 mt-2">
-                <div className="md:ml-5 md:mt-0 mt-2">
-                    <img className="md:w-40 w-32 sm:w-40 h-auto mx-auto mt-[-2px]" src={logo} alt='Logo Católica'></img>
-                </div>
-                <div className="flex flex-row gap-3 w-full md:pr-8 flex-nowrap">
-                    <div className="md:ml-10 ml-3 md:mt-3 mt-3">
-                        <p className="md:text-4xl text-[#00559C] font-bold text-sm sm:text-xl md:mt-[-5px]">Católica Eventos</p>
+            <div className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-blue-100/50">
+                <div className="flex px-4 md:px-8 py-4 items-center">
+                    <div className="flex items-center">
+                        <img className="md:w-40 w-32 h-auto" src={logo || "/placeholder.svg"} alt="Logo Católica" />
+                        <div className="ml-4">
+                            <p className="md:text-4xl text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                                Católica Eventos
+                            </p>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -47,27 +50,27 @@ export default function ValidateCertificate() {
                         }
                     }}
                 >
-                        <Form>
-                            <div className="mt-4">
-                                <FormInputComponent
-                                    name="codigoValidate"
-                                    type="text"
-                                    placeholder="Digite o Código do Certificado"
-                                    className="w-full"
-                                ></FormInputComponent>
-                            </div>
-                            <div className="mt-4">
-                                <AuthButtonComponent
-                                    label="Verificar"
-                                ></AuthButtonComponent>
-                            </div>
-                        </Form>
+                    <Form>
+                        <div className="mt-4">
+                            <FormInputComponent
+                                name="codigoValidate"
+                                type="text"
+                                placeholder="Digite o Código do Certificado"
+                                className="w-full"
+                            ></FormInputComponent>
+                        </div>
+                        <div className="mt-4">
+                            <AuthButtonComponent
+                                label="Verificar"
+                            ></AuthButtonComponent>
+                        </div>
+                    </Form>
                 </Formik>
 
             </div>
             {message === "Certificado válido." ? (
                 <p className="text-green-600 mt-3 text-center font-semibold">{message}</p>
-            ):(
+            ) : (
                 <p className="text-red-600 mt-3 text-center font-semibold">{message}</p>
             )}
         </>
