@@ -123,6 +123,8 @@ export default function UpdateProfileAdmin() {
                                     </div>
                                     <div className="flex flex-row">
                                         <UploadImageComponent
+                                            id="profile"
+                                            name="profile_picture"
                                             label="Anexar uma foto"
                                             onChange={(event) => {
                                                 const file = event.currentTarget.files[0];

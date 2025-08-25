@@ -23,6 +23,10 @@ export default function Home() {
         navigate(`/event/${id_event}`)
     }
 
+    function handleCreateEvent(){
+        navigate("/event/create");
+    }
+
     function clearEvents() {
         setEvents([])
     }
@@ -54,10 +58,12 @@ export default function Home() {
             {role === "admin" && (
                 <div className="relative">
                     <Menu onLogout={clearEvents} />
-                    <div className="fixed bottom-0 md:right-3 right-0 m-5 font-semibold">
+                    <div className="fixed md:bottom-2 bottom-2 right-6 z-50 font-semibold">
                         <ButtonComponent
                             label="Criar Evento"
                             color="blue"
+                            size="md:w-48 w-32 md:h-10 h-8"
+                            onClick={handleCreateEvent}
                         ></ButtonComponent>
                     </div>
                 </div>
@@ -144,25 +150,7 @@ export default function Home() {
                                             className="w-full h-48 object-cover cursor-pointer transition-transform duration-300 group-hover:scale-110"
                                             onClick={() => handleImageClick(event.id_event)}
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="bg-white/90 backdrop-blur-sm rounded-full p-2">
-                                                <svg className="w-4 h-4 text-[#00559C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                    />
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                    />
-                                                </svg>
-                                            </div>
-                                        </div>
+                                        <div className=" inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
                                     <div className="p-4">
                                         <h4 className="font-semibold text-[#021D50] text-center text-sm md:text-base leading-tight group-hover:text-[#00559C] transition-colors duration-300">

@@ -13,8 +13,7 @@ import MyEvents from './pages/MyEvents';
 import MyActivities from './pages/MyActivities';
 import MyCertificates from './pages/MyCertificates';
 import ForgetPassword from './pages/ForgetPassword';
-
-
+import CreateEvent from './pages/CreateEvent';
 
 function App() {
   return (
@@ -34,6 +33,7 @@ function App() {
             <Route path='/:id_event/my/activities' element={<PrivateRoute requiredRole="user"><MyActivities></MyActivities></PrivateRoute>}></Route>
             <Route path='/my/certificate' element={<PrivateRoute requiredRole="user"><MyCertificates></MyCertificates></PrivateRoute>}></Route>
             <Route path='/forget/password' element={<ForgetPassword></ForgetPassword>}></Route>
+            <Route path='/event/create' element={<PrivateRoute requiredRole="admin"><CreateEvent></CreateEvent></PrivateRoute>}></Route>
           </Routes>
         </Router>
       </AuthProvider>

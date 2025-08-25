@@ -3,7 +3,7 @@ import { Field, ErrorMessage } from "formik";
 export default function FormInputComponent({ label, name, type, placeholder}) {
     return (
         <>
-            <div>
+            
                 {label && (
                     <label
                         htmlFor={name}
@@ -12,7 +12,7 @@ export default function FormInputComponent({ label, name, type, placeholder}) {
                         {label}
                     </label>
                 )}
-            </div>
+            
             <Field
                 name={name}
                 type={type}

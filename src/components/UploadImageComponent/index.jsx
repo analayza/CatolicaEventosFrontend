@@ -1,5 +1,5 @@
 import { FiUploadCloud } from "react-icons/fi";
-export default function UploadImageComponent({ onChange, id = "profile_picture", label }) {
+export default function UploadImageComponent({ onChange, id, label, name }) {
     return (
         <label
             htmlFor={id}
@@ -10,7 +10,7 @@ export default function UploadImageComponent({ onChange, id = "profile_picture",
             <input
                 type="file"
                 id={id}
-                name={id}
+                name={name}
                 className="hidden"
                 onChange={onChange}
             />

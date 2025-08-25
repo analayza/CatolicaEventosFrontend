@@ -80,7 +80,7 @@ export default function UpdateProfileUser() {
                     })}
                         onSubmit={async (values, { setSubmitting }) => {
                             const formData = new FormData();
-                            console.log("Submit chamando com valores: " , values);
+                            console.log("Submit chamando com valores: ", values);
                             if (values.name) formData.append("name", values.name);
                             if (values.email) formData.append("email", values.email);
                             if (values.oldPassword) formData.append("oldPassword", values.oldPassword);
@@ -115,6 +115,8 @@ export default function UpdateProfileUser() {
                                     </div>
                                     <div className="flex flex-row">
                                         <UploadImageComponent
+                                            id="profile"
+                                            name="profile_picture"
                                             label="Anexar uma foto"
                                             onChange={(event) => {
                                                 const file = event.currentTarget.files[0];

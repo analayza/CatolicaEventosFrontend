@@ -8,7 +8,7 @@ export default function ButtonComponent({ label, type = 'submit', onClick, color
         gray: "bg-gray-400 hover:bg-gray-600",
     };
 
-    const sizeStyles = size || "md:w-50 w-25 md:h-10 h-8" 
+    const sizeStyles = size || "md:w-48 w-24 md:h-10 h-8" 
     const colorClasses = colorClassesMap[color] || colorClassesMap.green;
     const texStyles = text || "md:text-xl text-sm"
     return (
