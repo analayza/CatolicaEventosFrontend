@@ -14,6 +14,10 @@ import MyActivities from './pages/MyActivities';
 import MyCertificates from './pages/MyCertificates';
 import ForgetPassword from './pages/ForgetPassword';
 import CreateEvent from './pages/CreateEvent';
+import ConfigActivity from './pages/ConfigActivity';
+import CreateActivity from './pages/CreateActivity';
+import UpdateEvent from './pages/UpdateEvent/UpdateEvent';
+import UpdateActivity from './pages/UpdateActivity';
 
 function App() {
   return (
@@ -34,6 +38,10 @@ function App() {
             <Route path='/my/certificate' element={<PrivateRoute requiredRole="user"><MyCertificates></MyCertificates></PrivateRoute>}></Route>
             <Route path='/forget/password' element={<ForgetPassword></ForgetPassword>}></Route>
             <Route path='/event/create' element={<PrivateRoute requiredRole="admin"><CreateEvent></CreateEvent></PrivateRoute>}></Route>
+            <Route path='/config/activity/:id_activity' element={<PrivateRoute requiredRole="admin"><ConfigActivity></ConfigActivity></PrivateRoute>}></Route>
+            <Route path='/create/activity/:id_event' element={<PrivateRoute requiredRole="admin"><CreateActivity></CreateActivity></PrivateRoute>}></Route>
+            <Route path='/event/update/:id_event' element={<PrivateRoute requiredRole="admin"><UpdateEvent></UpdateEvent></PrivateRoute>}></Route>
+            <Route path='/activity/update/:id_activity' element={<PrivateRoute requiredRole="admin"><UpdateActivity></UpdateActivity></PrivateRoute>}></Route>
           </Routes>
         </Router>
       </AuthProvider>

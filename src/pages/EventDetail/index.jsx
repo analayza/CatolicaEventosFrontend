@@ -1,14 +1,23 @@
 import logo from "../../assets/logo-catolica.png"
 import eventDetail from "../../service/EventDetail"
 import ButtonComponent from "../../components/ButtonComponent"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext, cache } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { AuthContext } from "../../context/AuthContext"
 import MenuUser from "../../components/MenuUserComponent"
 import Menu from "../../components/MenuComponent"
-import { FaCheck, FaInfoCircle, FaTimes, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaDollarSign } from "react-icons/fa"
+import { FaCheck, FaInfoCircle, FaTimes, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaDollarSign, FaLock, FaUnderline } from "react-icons/fa"
 import findAllActivitiesOfEvent from "../../service/FindAllActivitiesOfEvent"
 import createEnrollment from "../../service/CreateEnrollment"
+import { FaCog } from 'react-icons/fa';
+import { FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import deleteEvent from "@/service/DeleteEvent"
+import disableEvent from "@/service/DisableEvent"
+import findAllActivitiesActiveOfEvent from "@/service/FindAllActivitiesActiveOfEvent"
+import isUserEnrolled from "@/service/IsUserEnrolled"
+
 
 export default function EventDetail() {
     const navigate = useNavigate()
@@ -16,13 +25,17 @@ export default function EventDetail() {
     const { role, isAuthenticated, token } = useContext(AuthContext)
 
     const [event, setEvent] = useState(null)
+    const [activitiesActive, setActivitiesActive] = useState([])
     const [activities, setActivities] = useState([])
     const [openActivity, setOpenActivity] = useState(null)
     const [message, setMessage] = useState("")
     const [showMessage, setShowMessage] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [openDeleteEvent, setOpenDeleteEvent] = useState(null)
+    const [UserEnrolled, setUserEnrolled] = useState({})
+    const activitiesToShow = isAuthenticated && role === "admin" ? activities : activitiesActive;
 
-    function handle() {
+    function handleLogin() {
         navigate("/login")
     }
 
@@ -41,19 +54,47 @@ export default function EventDetail() {
     }, [id_event])
 
     useEffect(() => {
-        async function loadActivities() {
+        async function loadActivitiesActive() {
             try {
-                const allActivities = await findAllActivitiesOfEvent(id_event)
-                setActivities(allActivities || [])
+                const allActivities = await findAllActivitiesActiveOfEvent(id_event)
+                setActivitiesActive(allActivities || [])
             } catch (error) {
-                console.error("Erro ao carregar atividades: ", error)
-                alert("Erro ao carregar atividades: " + error.message)
+                console.error("Erro ao carregar atividades: ", error);
+            }
+        }
+        if (id_event) {
+            loadActivitiesActive()
+        }
+    }, [id_event])
+
+    useEffect(() => {
+        async function loadActivities() {
+            if (!isAuthenticated || role !== "admin") return;
+
+            try {
+                const activities = await findAllActivitiesOfEvent(id_event, token)
+                setActivities(activities || [])
+            } catch (error) {
+                console.error("Erro ao carregar atividades: ", error);
             }
         }
         if (id_event) {
             loadActivities()
         }
-    }, [id_event])
+    }, [id_event, isAuthenticated, role, token])
+
+    useEffect(() => {
+        if (!token) return;
+
+        activitiesToShow.forEach(async (activity) => {
+            try {
+                const enrolled = await isUserEnrolled(token, activity.id_activity);
+                setUserEnrolled(prev => ({ ...prev, [activity.id_activity]: enrolled }));
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }, [activitiesToShow, token]);
 
     function formateDate(isoDate) {
         const data = new Date(isoDate)
@@ -107,6 +148,58 @@ export default function EventDetail() {
         }
     }, [showMessage])
 
+
+    function handleConfigActivity(id_activity) {
+        navigate(`/config/activity/${id_activity}`);
+    }
+
+    function handleCreateActivity() {
+        navigate(`/create/activity/${id_event}`);
+    }
+
+    function handleUpdateEvent() {
+        navigate(`/event/update/${id_event}`)
+    }
+
+    function toggleEventDelete() {
+        if (openDeleteEvent) {
+            setOpenDeleteEvent(false);
+        } else {
+            setOpenDeleteEvent(true);
+        }
+    }
+
+    async function handleDeleteEvent(id_event) {
+        if (activities.length >= 0) {
+            setMessage("Para deletar esse evento, delete primeiro todas as suas atividades.");
+            setShowMessage(true);
+        }
+        try {
+            await deleteEvent(token, id_event);
+            setMessage("Evento deletado com sucesso!");
+            setShowMessage(true);
+            const timer = setTimeout(() => {
+                navigate("/");
+            }, 3000)
+            return () => clearTimeout(timer)
+
+        } catch (error) {
+            console.error("Erro ao deletar o evento: ", error);
+        }
+    }
+
+    async function handleDisableEvent(id_event) {
+        try {
+            await disableEvent(id_event, token);
+            setMessage("Evento Desabilitado com sucesso!");
+            setShowMessage(true);
+        } catch (error) {
+            console.error("Erro ao desabilitar o evento: ", error);
+        }
+    }
+
+
+
     return (
         <>
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 relative overflow-hidden">
@@ -128,7 +221,7 @@ export default function EventDetail() {
                                 </div>
                             </div>
                             <div className="ml-auto">
-                                <ButtonComponent label="Login" onClick={handle}  />
+                                <ButtonComponent label="Login" onClick={handleLogin} />
                             </div>
                         </div>
                     </div>
@@ -165,15 +258,104 @@ export default function EventDetail() {
                                 </div>
                             </div>
 
+                            {isAuthenticated && role === "admin" ? (
+
+                                <div className="flex flex-col ">
+                                    <div className="mb-6">
+                                        <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">Configure seu Evento</h2>
+                                        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-600 mx-auto rounded-full"></div>
+                                    </div>
+
+                                    <div className="md:flex md:flex-row grid-cols-2 grid items-center md:not-last:items-center justify-center mb-8 gap-1">
+                                        <div className="flex items-center gap-4 ml-2">
+                                            <ButtonComponent
+                                                label="Editar"
+                                                size="w-35 h-10"
+                                                color="greenwater"
+                                                onClick={handleUpdateEvent}
+                                            >
+                                                <FaEdit className="mb-1 mr-1"></FaEdit> Editar
+                                            </ButtonComponent>
+                                        </div>
+                                        <div className="flex items-center gap-2 ml-2">
+                                            <ButtonComponent
+                                                label="Excluir"
+                                                size="w-35 h-10"
+                                                color="red"
+                                                onClick={toggleEventDelete}
+                                            >
+                                                <FaTrash className="mb-1 mr-1"></FaTrash> Excluir
+                                            </ButtonComponent>
+                                        </div>
+                                        <div className="flex items-center gap-2 ml-2">
+                                            <ButtonComponent
+                                                label="Visualizar Certificado"
+                                                size="h-10"
+                                                color="gray"
+                                            >
+                                                <FaEye className="mb-1 mr-1"></FaEye> Visualizar Certificado
+                                            </ButtonComponent>
+                                        </div>
+                                        <div className="flex items-center gap-1 ml-2">
+                                            <ButtonComponent
+                                                label="Desativar"
+                                                size="h-10"
+                                                color="purple"
+                                                onClick={() => handleDisableEvent(id_event)} ///FALTA HABILITAR CORS
+                                            >
+                                                <FaLock className="mb-1 mr-1"></FaLock> Desativar
+                                            </ButtonComponent>
+                                        </div>
+                                    </div>
+
+                                    {openDeleteEvent && (
+                                        <>
+                                            <div
+                                                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity"
+                                                onClick={() => setOpenDeleteEvent(null)}
+                                            />
+                                            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 z-50 max-w-lg w-[90%] max-h-[80vh] overflow-auto border border-gray-100">
+                                                <div className="flex justify-between items-start mb-1 ml-5">
+                                                    <div className="flex flex-col items-center justify-center">
+                                                        <h3 className="mb-2"><strong>Tem certeza que deseja excluir o evento?</strong></h3>
+                                                        <div className="flex flex-row gap-2">
+                                                            <ButtonComponent
+                                                                label="Sim"
+                                                                onClick={() => handleDeleteEvent(id_event)}
+                                                            />
+                                                            <ButtonComponent
+                                                                label="Não"
+                                                                color="red"
+                                                                onClick={() => setOpenDeleteEvent(false)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => setOpenDeleteEvent(null)}
+                                                        className="p-0 hover:bg-gray-100 rounded-full transition-colors"
+                                                        aria-label="Fechar modal"
+                                                    >
+                                                        <FaTimes className="w-5 h-5 text-gray-500 hover:text-gray-700" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            ) : (
+                                <div>
+                                </div>
+                            )}
+
+
                             <div className="max-w-7xl mx-auto px-4 md:px-8 pb-20">
                                 <div className="mb-8">
                                     <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">Atividades do Evento</h2>
                                     <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-600 mx-auto rounded-full"></div>
                                 </div>
-
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {activities && activities.length > 0 ? (
-                                        activities.map((activity) => (
+                                    {activitiesToShow && activitiesToShow.length > 0 ? (
+                                        activitiesToShow.map((activity) => (
                                             <div key={activity.id_activity} className="flex flex-col w-full max-w-xl mx-auto relative">
                                                 <div className="bg-white rounded-t-xl shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500 overflow-hidden group h-40 flex flex-col">
                                                     <div className="p-6 flex-1 flex flex-col justify-between">
@@ -193,22 +375,50 @@ export default function EventDetail() {
                                                     </div>
                                                 </div>
 
-                                                <div className="bg-gray-50 rounded-b-xl shadow-lg border-t border-gray-100 p-4 flex gap-2 h-16 items-center">
-                                                    <button
-                                                        onClick={() => toggleActivity(activity.id_activity)}
-                                                        className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200 text-sm font-medium"
-                                                    >
-                                                        <FaInfoCircle className="w-4 h-4" />
-                                                        Mais Informações
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleRealizationEnrollment(activity.id_activity, activity.price)}
-                                                        className="flex items-center gap-2 px-4 py-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200 text-sm font-medium"
-                                                    >
-                                                        <FaCheck className="w-4 h-4" />
-                                                        Inscrever-se
-                                                    </button>
-                                                </div>
+
+                                                {!isAuthenticated || isAuthenticated && role === "user" ? (
+
+                                                    <div className="bg-gray-50 rounded-b-xl shadow-lg border-t border-gray-100 p-4 flex gap-2 h-16 items-center">
+                                                        <button
+                                                            onClick={() => toggleActivity(activity.id_activity)}
+                                                            className="cursor-pointer flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200 text-sm font-medium"
+                                                        >
+                                                            <FaInfoCircle className="w-4 h-4" />
+                                                            Mais Informações
+                                                        </button>
+                                                        {UserEnrolled[activity.id_activity] ? (
+                                                            <button
+                                                                className="cursor-not-allowed flex items-center gap-2 px-4 py-2  text-gray-600 text-sm font-medium"
+                                                            >
+                                                                <FaCheck className="w-4 h-4" />
+                                                                Inscrito
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => handleRealizationEnrollment(activity.id_activity, activity.price)}
+                                                                className="cursor-pointer flex items-center gap-2 px-4 py-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-200 text-sm font-medium"
+                                                            >
+                                                                <FaCheck className="w-4 h-4" />
+                                                                Inscrever-se
+                                                            </button>
+                                                        )}
+
+                                                    </div>
+
+
+                                                ) : (
+
+                                                    <div className="bg-gray-50 rounded-b-xl shadow-lg border-t border-gray-100 flex justify-center h-16 items-center">
+                                                        <button
+                                                            onClick={() => handleConfigActivity(activity.id_activity)}
+                                                            className="cursor-pointer flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-all duration-200 text-sm font-medium"
+                                                        >
+                                                            <FaCog className="w-4 h-4" />
+                                                            Configurar Atividade
+                                                        </button>
+                                                    </div>
+
+                                                )}
 
                                                 {openActivity === activity.id_activity && (
                                                     <>
@@ -264,6 +474,24 @@ export default function EventDetail() {
                                     )}
                                 </div>
 
+
+
+                            </div>
+
+                            {isAuthenticated && role === "admin" ? (
+
+                                <div className='md:justify-end justify-center bottom-0 md:fixed flex items-center md:right-3 right-0 md:m-2 m-5 font-semibold'>
+                                    <ButtonComponent
+                                        label="Criar Atividade"
+                                        color='blue'
+                                        size="md:w-50 w-45 md:h-10 h-8 "
+                                        text="text-base"
+                                        onClick={handleCreateActivity}
+                                    >
+                                    </ButtonComponent>
+                                </div>
+                            ) : (
+
                                 <div className='md:justify-end justify-center bottom-0 md:fixed flex items-center md:right-3 right-0 md:m-2 m-5 font-semibold'>
                                     <ButtonComponent
                                         label="Patrocinar Evento"
@@ -273,7 +501,8 @@ export default function EventDetail() {
                                     >
                                     </ButtonComponent>
                                 </div>
-                            </div>
+                            )}
+
                         </>
                     ) : (
                         <div className="flex justify-center items-center min-h-[60vh]">

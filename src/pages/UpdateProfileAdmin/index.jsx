@@ -173,7 +173,7 @@ export default function UpdateProfileAdmin() {
                                         className="w-full"
                                     />
                                 </div>
-                                <div className='mt-4 mb-4 justify-center items-center flex md:mr-30'>
+                                <div className='mt-4 mb-4 justify-center items-center flex md:mr-30 md:ml-35'>
                                     <ButtonComponent
                                         label="Salvar"
                                     />

@@ -3,7 +3,6 @@ import FormInputComponent from "@/components/FormInputComponent";
 import Menu from "@/components/MenuComponent";
 import UploadImageComponent from "@/components/UploadImageComponent";
 import { AuthContext } from "@/context/AuthContext";
-import createEvent from "@/service/CreateEvent";
 import { Formik, Form } from "formik";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +11,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa";
 
-export default function CreateEvent() {
+
+//FALTA FAZER A LOGICA E AJUSTAR O ENVIO DE DADOS
+export default function UpdateEvent() {
 
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
@@ -33,13 +34,14 @@ export default function CreateEvent() {
         }
     }, [showMessage])
 
+
     return (
         <>
             <Menu></Menu>
             <div className="min-h-screen bg-gradient-to-br from-blue-50/50 to-blue-50/50">
                 <div className="pt-8 pb-4">
                     <h1 className="text-[#005398] md:text-3xl text-lg font-bold mt-4 justify-center items-center flex">
-                        Preencha os campos e crie seu evento
+                         Atualizar Evento
                     </h1>
                 </div>
 
@@ -60,11 +62,9 @@ export default function CreateEvent() {
                             validationSchema={Yup.object({
                                 name: Yup.string()
                                     .min(3, "O nome deve contér no mínimo 3 caracteres")
-                                    .max(50, "O nome deve conter no máximo 50 caracteres")
-                                    .required("Obrigatório"),
+                                    .max(50, "O nome deve conter no máximo 50 caracteres"),
                                 description: Yup.string()
-                                    .max(500, "A descrição deve conter no máximo 500 caracteres")
-                                    .required("Obrigatório"),
+                                    .max(500, "A descrição deve conter no máximo 500 caracteres"),
                                 start_date: Yup.date().required("Obrigatório"),
                                 end_date: Yup.date().required("Obrigatório"),
                                 location: Yup.string().min(3, "O nome deve contér no mínimo 3 caracteres").required("Obrigatório"),
@@ -93,11 +93,9 @@ export default function CreateEvent() {
                                         }
                                     ),
                                 sponsor_pitch: Yup.string()
-                                    .max(500, "A descrição deve conter no máximo 500 caracteres")
-                                    .required("Obrigatório"),
+                                    .max(500, "A descrição deve conter no máximo 500 caracteres"),
                                 minimum_sponsorship_value: Yup.number()
-                                    .min(0, "O valor do patrocinio deve ser maior que zero")
-                                    .required("Obrigatório"),
+                                    .min(0, "O valor do patrocinio deve ser maior que zero"),
                             })}
                             onSubmit={async (values, { setSubmitting }) => {
                                 const formData = new FormData();
@@ -113,7 +111,7 @@ export default function CreateEvent() {
 
 
                                 try {
-                                    const resul = await createEvent(formData, token);
+                                    //const resul = await (formData, token); CHAMAR A FUNÇÃO
                                     setShowMessage(true);
                                     setMessage("Evento Criado com Sucesso!");
                                 } catch (error) {

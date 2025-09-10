@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import MenuUser from "../../components/MenuUserComponent"
 import { AuthContext } from "../../context/AuthContext"
 import myCertificates from "../../service/MyCertificates"
+import { FaAward, FaDownload } from "react-icons/fa"
 
 export default function MyCertificates() {
   const [myCertificateList, setMyCertificateList] = useState([])
@@ -62,7 +63,7 @@ return (
             myCertificateList.map((certificates, index) => (
               <div
                 key={certificates.id_certificate}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/50 overflow-hidden group"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/50 overflow-hidden group h-80 flex flex-col"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 p-8 text-white overflow-hidden">
@@ -73,14 +74,15 @@ return (
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
                       <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {/* <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
                             d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
                           />
-                        </svg>
+                        </svg> */}
+                        <FaAward className="w-7 h-7" />
                       </div>
                     </div>
                     <h3 className="font-bold text-xl leading-tight mb-2">{certificates.activity_name}</h3>
@@ -95,14 +97,15 @@ return (
                     rel="noopener noreferrer"
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center group-hover:shadow-lg transform hover:scale-105"
                   >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {/* <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
                         d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                       />
-                    </svg>
+                    </svg> */}
+                    <FaDownload className="w-5 h-5 mr-3" />
                     Baixar Certificado
                   </a>
                 </div>

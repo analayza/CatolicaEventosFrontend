@@ -1,13 +1,13 @@
-import Api from "./Api.js";
+import Api from "../service/Api.js";
 
-export default async function findAllActivitiesOfEvent(id_event, token) {
+export default async function disableActivity(token, id_activity) {
     try {
-        const response = await Api.get(`/event/${id_event}/activities`, {
+        const response = await Api.patch(`/activity/disable/${id_activity}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        });
-        return response.data.activities;
+        })
+        return response.data;       
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.error);
@@ -16,6 +16,3 @@ export default async function findAllActivitiesOfEvent(id_event, token) {
         }
     }
 }
-
-
-

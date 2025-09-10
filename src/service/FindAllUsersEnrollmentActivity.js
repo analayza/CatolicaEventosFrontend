@@ -1,13 +1,13 @@
 import Api from "./Api.js";
 
-export default async function findAllActivitiesOfEvent(id_event, token) {
+export default async function findAllUsersEnrollmentActivity(id_activity, token) {
     try {
-        const response = await Api.get(`/event/${id_event}/activities`, {
+        const response = await Api.get(`/activity/${id_activity}/users`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-        return response.data.activities;
+        return response.data.allEnrollment;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.error);

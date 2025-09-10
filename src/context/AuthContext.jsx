@@ -8,6 +8,7 @@ const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [userId, setUserId] = useState(null);
   const logoutTimer = useRef(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
 
   function logoutContext() {
     localStorage.removeItem('token');
@@ -49,6 +50,7 @@ const AuthProvider = ({ children }) => {
         logoutContext();
       }
     }
+    setLoadingAuth(false)
   }, []);
 
   function loginContext(newToken) {
@@ -66,7 +68,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loginContext, logoutContext, token, role, userId }}
+      value={{ isAuthenticated, loginContext, logoutContext, token, role, userId, loadingAuth }}
     >
       {children}
     </AuthContext.Provider>

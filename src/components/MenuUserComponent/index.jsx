@@ -36,7 +36,7 @@ export default function MenuUser() {
                     ><FaCog className="w-5 h-5" /> Configurações</NavLink>
                 </li>
                 <li>
-                    <button onClick={handleLogout} className="flex items-center gap-1"><FaSignOutAlt className="w-5 h-5" />Sair</button>
+                    <button onClick={handleLogout} className="flex items-center gap-1 cursor-pointer"><FaSignOutAlt className="w-5 h-5" />Sair</button>
                 </li>
             </ul>
         </nav>

@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Home() {
     const [events, setEvents] = useState([]);
-    const { role, isAuthenticated, token } = useContext(AuthContext);
+    const { role, isAuthenticated, token, loadingAuth } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate()
@@ -32,6 +32,8 @@ export default function Home() {
     }
 
     useEffect(() => {
+        if (loadingAuth) return; 
+        
         async function loadEvents() {
             try {
                 if (isAuthenticated && role === "admin") {
@@ -51,7 +53,7 @@ export default function Home() {
             }
         }
         loadEvents()
-    }, [isAuthenticated, role, token])
+    }, [isAuthenticated, role, token, loadingAuth])
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
