@@ -8,6 +8,7 @@ export default async function login(email, password) {
         })
 
         const { token } = response.data;
+        localStorage.setItem("token", token);
         return {token};
     } catch (error) {
         if (error.response) {
