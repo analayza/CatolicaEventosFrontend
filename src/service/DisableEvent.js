@@ -1,7 +1,6 @@
 import Api from "./Api.js";
 
-export default async function disableEvent(id_event) {
-    const token = localStorage.getItem("token")
+export default async function disableEvent(id_event,token) {
     try {
         const response = await Api.patch(`/event/disable/${id_event}`, 
             {
